@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1"> 
+        <title>Page Title</title>
+        
+        <link rel="stylesheet" href="css/jquery.mobile-1.4.0.min.css" />
+        <script src="js/jquery-1.10.2.min.js"></script>
+        <script src="js/jquery.mobile-1.4.0.min.js"></script>
+        
+<!--        <link rel="stylesheet" href="css/jquery.mobile-1.3.2.min.css" />
+        <script src="js/jquery-1.9.1.min.js"></script>
+        <script src="js/jquery.mobile-1.3.2.min.js"></script>-->
+        
+        
+        
+        <script type="application/javascript" src="js/fastclick.js"></script> 
+        <style type="text/css">         
+            img {
+                display: block;
+                width: 100%;
+            }
+        </style>
+        <script>
+            $(function() {
+                FastClick.attach(document.body);
+            });
+
+            var dgitem = '';
+            var list1classnum = 'null';
+            var list2classnum = 'null';
+            var dgchoice1 = '';
+            var dgchoice2 = '';
+
+            function setitem(item) {
+                dgitem = item;
+            }
+
+            function selectitem(selection, selectclass) {
+                var img = $(selection).children('img').attr('src');
+                var title = $(selection).children('p:first').text();
+                var desc = $(selection).children('p:last').text();
+
+                if (dgitem === 'list1') {
+                    $('#list1name').text(title);
+                    $('#list1img').attr("src", img);
+                    $('#list1desc').text(desc);
+                    list1classnum = selectclass;
+                    dgchoic1 = title;
+                }
+                else if (dgitem === 'list2') {
+                    $('#list2name').text(title);
+                    $('#list2img').attr("src", img);
+                    $('#list2desc').text(desc);
+                    list2classnum = selectclass;
+                    dgchoice2 = title;
+                }
+            }
+
+            function checkcompatability() {
+                var list1 = list1classnum;
+                var list2 = list2classnum;
+
+                if (list1 === 'null' || list2 === 'null') {
+                    $("#answer").html(' <h1><strong>You Must Select Two Dangerous Goods to Transport</strong></h1>');
+                }
+                else {
+
+                    var exception1 = "Explosives are incompatible in transport with all other dangerous goods in all quantities except as provided in the Australian Explosives Code or, for Division 1.4S, provided the aggregate quantity of all dangerous goods in the transport unit does not exceed 1000 kg(L)";
+                    var exception2 = "Division 2.1 and Class 3 are incompatible in transport if both are in tanks or other receptacles with a capacity individually exceeding 500L.";
+                    var exception3 = "Division 2.1 is incompatible in transport with gases of Division 2.2 that have a subsidiary risk 5.1 except when all are packed in cylinders or pressure drums not exceeding 500 L capacity.";
+                    var exception4 = "Divisiaon 2.3 is incompatible in transport with gases of Division 2.2 that have a subsidiary risk 5.1 except when all are packed in cylinders or pressure drums not exceeding 500 L capacity.";
+                    var exception5 = "Class 5 is incompatible with those Class 6 or Class 9 materials that are fire-risk substances.";
+                    var exception6 = "Some specific examples of these Classes or Divisions are incompatible - see table below";
+                    var exception7 = "See the Code of Practice for the Safe Transport of Radioactive Substances regarding the compatibility of Class 7 with undeveloped photographic film, personnel and mail.";
+                    var exception8 = "Food and food packagings are incompatible with these classes (see ADG (7th) 9.1.2.3 for further details).";
+                    var exceptionoutput = "<h2>Exceptions</h2><p></p>";
+                    var compatability = "";
+                    switch (list1) {
+                        case '1':
+                            compatability = "<p><strong>Incompatable!</strong></p>";
+                            exceptionoutput = "<h2>Exceptions</h2><p>" + exception1 + "</p>";
+                            break;
+                        case '2.1':
+                            if (list2 === '2.1' || list2 === '2.3' || list2 === '6' || list2 === '8' || list2 === '9' || list2 === 'A' || list2 === 'B') {
+                                compatability = "<p><strong>Compatable</strong></p>";
+                                exceptionoutput = "";
+                            }
+                            else if (list2 === '2.2') {
+                                compatability = "<p>Compatable<strong> - Note Exception</strong></p>";
+                                exceptionoutput = "<h2>Exceptions</h2><p>" + exception3 + "</p>";
+                            }
+                            else if (list2 === '3') {
+                                compatability = "<p>Compatable<strong> - Note Exception</strong></p>";
+                                exceptionoutput = "<h2>Exceptions</h2><p>" + exception2 + "</p>";
+                            }
+                            else if (list2 === '1') {
+                                compatability = "<p><strong>Incompatable!</strong></p>";
+                                exceptionoutput = "<h2>Exceptions</h2><p>" + exception1 + "</p>";
+                            }
+                            else {
+                                compatability = "<p><strong>Incompatable!</strong></p>";
+                                exceptionoutput = "";
+                            }
+
+                            break;
+                        case '2.2':
+                            if (list2 === '2.2' || list2 === '3' || list2 === '4.1' || list2 === '4.3' || list2 === '5.1' || list2 === '6' || list2 === '7' || list2 === '8' || list2 === '9' || list2 === 'A' || list2 === 'B') {
+                                compatability = "<p><strong>Compatable</strong></p>";
+                                exceptionoutput = "";
+                            }
+                            else if (list2 === '2.1') {
+                                compatability = "<p>Compatable<strong> - Note Exception</strong></p>";
+                                exceptionoutput = "<h2>Exceptions</h2><p>" + exception3 + "</p>";
+                            }
+                            else if (list2 === '2.3') {
+                                compatability = "<p>Compatable<strong> - Note Exception</strong></p>";
+                                exceptionoutput = "<h2>Exceptions</h2><p>" + exception4 + "</p>";
+                            }
+                            else if (list2 === '1') {
+                                compatability = "<p><strong>Incompatable!</strong></p>";
+                                exceptionoutput = "<h2>Exceptions</h2><p>" + exception1 + "</p>";
+                            }
+                            else {
+                                compatability = "<p><strong>Incompatable!</strong></p>";
+                                exceptionoutput = "";
+                            }
+
+                            break;
+                        case '2.3':
+                            if (list2 === '2.2') {
+                                compatability = "<p>Compatable<strong> - Note Exception</strong></p>";
+                                exceptionoutput = "<h2>Exceptions</h2><p>" + exception4 + "</p>";
+                            }
+                            else if (list2 === '3' || list2 === '4.2' || list2 === '5.1' || list2 === '5.2') {
+                                compatability = "<p><strong>Incompatable!</strong></p>";
+                                exceptionoutput = "";
+                            }
+                            else if (list2 === '1') {
+                                compatability = "<p><strong>Incompatable!</strong></p>";
+                                exceptionoutput = "<h2>Exceptions</h2><p>" + exception1 + "</p>";
+                            }
+                            else if (list2 === 'A') {
+                                compatability = "<p><strong>Incompatable!</strong></p>";
+                                exceptionoutput = "<h2>Exceptions</h2><p>" + exception8 + "</p>";
+                            }
+                            else {
+                                compatability = "<p><strong>Compatable</strong></p>";
+                                exceptionoutput = "";
+                            }
+                            break;
+                        case '3':
+                            if (list2 === '2.1') {
+                                compatability = "<p>Compatable<strong> - Note Exception</strong></p>";
+                                exceptionoutput = "<h2>Exceptions</h2><p>" + exception2 + "</p>";
+                            }
+                            else if (list2 === '6') {
+                                compatability = "<p>Compatable<strong> - Note Exception</strong></p>";
+                                exceptionoutput = "<h2>Exceptions</h2><p>" + exception6 + "</p>";
+                            }
+                            else if (list2 === '2.3' || list2 === '4.2' || list2 === '5.1' || list2 === '5.2' || list2 === '7') {
+                                compatability = "<p><strong>Incompatable!</strong></p>";
+                                exceptionoutput = "";
+                            }
+                            else if (list2 === '1') {
+                                compatability = "<p><strong>Incompatable!</strong></p>";
+                                exceptionoutput = "<h2>Exceptions</h2><p>" + exception1 + "</p>";
+                            }
+                            else {
+                                compatability = "<p><strong>Compatable</strong></p>";
+                                exceptionoutput = "";
+                            }
+                            break;
+                        case '4.1':
+                            if (list2 === '2.1' || list2 === '4.2' || list2 === '5.1' || list2 === '5.2' || list2 === '7') {
+                                compatability = "<p><strong>Incompatable!</strong></p>";
+                                exceptionoutput = "";
+                            }
+                            else if (list2 === '1') {
+                                compatability = "<p><strong>Incompatable!</strong></p>";
+                                exceptionoutput = "<h2>Exceptions</h2><p>" + exception1 + "</p>";
+                            }
+                            else {
+                                compatability = "<p><strong>Compatable</strong></p>";
+                                exceptionoutput = "";
+                            }
+                            break;
+                        case '4.2':
+                            if (list2 === '4.2' || list2 === '4.3' || list2 === '6' || list2 === '8' || list2 === '9' || list2 === 'A' || list2 === 'B') {
+                                compatability = "<p><strong>Compatable</strong></p>";
+                                exceptionoutput = "";
+                            }
+                            else if (list2 === '1') {
+                                compatability = "<p><strong>Incompatable!</strong></p>";
+                                exceptionoutput = "<h2>Exceptions</h2><p>" + exception1 + "</p>";
+                            }
+                            else {
+                                compatability = "<p><strong>Incompatable!</strong></p>";
+                                exceptionoutput = "";
+                            }
+                            break;
+                        case '4.3':
+                            if (list2 === '2.1' || list2 === '5.1' || list2 === '5.2' || list2 === '7' || list2 === '8') {
+                                compatability = "<p><strong>Incompatable!</strong></p>";
+                                exceptionoutput = "";
+                            }
+                            else if (list2 === '1') {
+                                compatability = "<p><strong>Incompatable!</strong></p>";
+                                exceptionoutput = "<h2>Exceptions</h2><p>" + exception1 + "</p>";
+                            }
+                            else {
+                                compatability = "<p><strong>Compatable</strong></p>";
+                                exceptionoutput = "";
+                            }
+                            break;
+                        case '5.1':
+                            if (list2 === '6' || list2 === '9') {
+                                compatability = "<p>Compatable<strong> - Note Exception</strong></p>";
+                                exceptionoutput = "<h2>Exceptions</h2><p>" + exception5 + "</p>";
+                            }
+                            else if (list2 === '5.1') {
+                                compatability = "<p>Compatable<strong> - Note Exception</strong></p>";
+                                exceptionoutput = "<h2>Exceptions</h2><p>" + exception6 + "</p>";
+                            }
+                            else if (list2 === '2.2' || list2 === 'A') {
+                                compatability = "<p><strong>Compatable</strong></p>";
+                                exceptionoutput = "";
+                            }
+                            else if (list2 === '1') {
+                                compatability = "<p><strong>Incompatable!</strong></p>";
+                                exceptionoutput = "<h2>Exceptions</h2><p>" + exception1 + "</p>";
+                            }
+                            else {
+                                compatability = "<p><strong>Incompatable!</strong></p>";
+                                exceptionoutput = "";
+                            }
+                            break;
+                        case '5.2':
+                            if (list2 === '6' || list2 === '9') {
+                                compatability = "<p>Compatable<strong> - Note Exception</strong></p>";
+                                exceptionoutput = "<h2>Exceptions</h2><p>" + exception5 + "</p>";
+                            }
+                            else if (list2 === '5.2' || list2 === 'A') {
+                                compatability = "<p><strong>Compatable</strong></p>";
+                                exceptionoutput = "";
+                            }
+                            else if (list2 === '1') {
+                                compatability = "<p><strong>Incompatable!</strong></p>";
+                                exceptionoutput = "<h2>Exceptions</h2><p>" + exception1 + "</p>";
+                            }
+                            else {
+                                compatability = "<p><strong>Incompatable!</strong></p>";
+                                exceptionoutput = "";
+                            }
+                            break;
+                        case '6':
+                            if (list2 === '5.1' || list2 === '5.2') {
+                                compatability = "<p>Compatable<strong> - Note Exception</strong></p>";
+                                exceptionoutput = "<h2>Exceptions</h2><p>" + exception5 + "</p>";
+                            }
+                            else if (list2 === '3' || list2 === '8') {
+                                compatability = "<p>Compatable<strong> - Note Exception</strong></p>";
+                                exceptionoutput = "<h2>Exceptions</h2><p>" + exception6 + "</p>";
+                            }
+                            else if (list2 === '1') {
+                                compatability = "<p><strong>Incompatable!</strong></p>";
+                                exceptionoutput = "<h2>Exceptions</h2><p>" + exception1 + "</p>";
+                            }
+                            else if (list2 === 'A') {
+                                compatability = "<p><strong>Incompatable!</strong></p>";
+                                exceptionoutput = "<h2>Exceptions</h2><p>" + exception8 + "</p>";
+                            }
+                            else {
+                                compatability = "<p><strong>Compatable</strong></p>";
+                                exceptionoutput = "";
+                            }
+                            break;
+                        case '7':
+                            if (list2 === '2.2' || list2 === '2.3' || list2 === '6' || list2 === '7' || list2 === '9') {
+                                compatability = "<p><strong>Compatable</strong></p>";
+                                exceptionoutput = "";
+                            }
+                            else if (list2 === '1') {
+                                compatability = "<p><strong>Incompatable!</strong></p>";
+                                exceptionoutput = "<h2>Exceptions</h2><p>" + exception1 + "</p>";
+                            }
+                            else if (list2 === 'A') {
+                                compatability = "<p><strong>Incompatable!</strong></p>";
+                                exceptionoutput = "<h2>Exceptions</h2><p>" + exception8 + "</p>";
+                            }
+                            else if (list2 === 'B') {
+                                compatability = "<p><strong>Compatable</strong></p>";
+                                exceptionoutput = "";
+                            }
+                            else {
+                                compatability = "<p><strong>Incompatable!</strong></p>";
+                                exceptionoutput = "";
+                            }
+                            break;
+                        case '8':
+                            if (list2 === '4.3' || list2 === '5.1' || list2 === '5.2' || list2 === '7') {
+                                compatability = "<p><strong>Incompatable!</strong></p>";
+                                exceptionoutput = "";
+                            }
+                            else if (list2 === '6' || list2 === '8') {
+                                compatability = "<p>Compatable<strong> - Note Exception</strong></p>";
+                                exceptionoutput = "<h2>Exceptions</h2><p>" + exception6 + "</p>";
+                            }
+                            else if (list2 === '1') {
+                                compatability = "<p><strong>Incompatable!</strong></p>";
+                                exceptionoutput = "<h2>Exceptions</h2><p>" + exception1 + "</p>";
+                            }
+                            else {
+                                compatability = "<p><strong>Compatable</strong></p>";
+                                exceptionoutput = "";
+                            }
+                            break;
+                        case '9':
+                            if (list2 === '5.1' || list2 === '5.2') {
+                                compatability = "<p>Compatable<strong> - Note Exception</strong></p>";
+                                exceptionoutput = "<h2>Exceptions</h2><p>" + exception5 + "</p>";
+                            }
+                            else if (list2 === '1') {
+                                compatability = "<p><strong>Incompatable!</strong></p>";
+                                exceptionoutput = "<h2>Exceptions</h2><p>" + exception1 + "</p>";
+                            }
+                            else {
+                                compatability = "<p><strong>Compatable</strong></p>";
+                                exceptionoutput = "";
+                            }
+                            break;
+                        case 'A':
+                            if (list2 === '2.3' || list2 === '6' || list2 === '7' || list2 === '8') {
+                                compatability = "<p><strong>Incompatable! - Note Exception</strong></p>";
+                                exceptionoutput = "<h2>Exceptions</h2><p>" + exception8 + "</p>";
+                            }
+                            else if (list2 === '1') {
+                                compatability = "<p><strong>Incompatable!</strong></p>";
+                                exceptionoutput = "<h2>Exceptions</h2><p>" + exception1 + "</p>";
+                            }
+                            else {
+                                compatability = "<p><strong>Compatable</strong></p>";
+                                exceptionoutput = "";
+                            }
+                            break;
+                        case 'B':
+                            if (list2 === '5.1' || list2 === '5.2') {
+                                compatability = "<p><strong>Incompatable!</strong></p>";
+                                exceptionoutput = "";
+                            }
+                            else if (list2 === '1') {
+                                compatability = "<p><strong>Incompatable!</strong></p>";
+                                exceptionoutput = "<h2>Exceptions</h2><p>" + exception1 + "</p>";
+                            }
+                            else {
+                                compatability = "<p><strong>Compatable</strong></p>";
+                                exceptionoutput = "";
+                            }
+                            break;
+                    }
+
+                    $("#answer").html(' <h1>Transport Products</h1><p> You want to Transport <strong>' + dgchoic1 + '</strong> with <strong> ' + dgchoice2 + ' </strong> <h2>Compatability</h2>' + compatability + exceptionoutput);
+                }
+            }
+
+
+        </script>
+
+    </head>
+    <body>
+
+
+        <div data-role ="page" id ="disclaimer">
+
+            <div data-role ="content">
+                <img src="img/123DGAwareness.jpg" alt="123DGAwareness"/>  
+                <h1>Disclaimer!</h1>
+                <p>The information herein is provided <strong>ONLY</strong> as a reference for the safe transportation of Dangerous Goods</p>
+                <p>While we endeavour to provide quality and up-to-date information about Dangerous Goods Transportation, we make no guarantees about the accuracy, completeness, or adequacy of the information contained herein.</p>
+                <p>The information provided is subject to change, and may not directly reflect your specific governing legislation.</p>
+                <p><Strong>If any doubt refer to your relevant country, state or territories legislation.</Strong></p>
+                <p><a href="#dgcompare" data-role="button" data-theme="e">Ok Got It!</a></p>
+            </div>
+
+        </div>
+
+        <div data-role ="page" id ="dgcompare">
+
+            <div data-role ="content">
+                <img src="img/123DGAwareness.jpg" alt="123DGAwareness"/> 
+                <br>
+                <h3>Select Dangerous Goods to Transport</h3>
+                <br>
+                <ul data-role="listview">
+                    <li data-role="list-divider">Dangerous Goods Item 1</li>
+                    <li>
+                        <a href="#dglist" onclick ="setitem('list1');">
+                            <img src ="img/Question.png" id ="list1img">
+                            <h3 id ="list1name">DG Type</h3>
+                            <p id ="list1desc">Select DG Class.</p>                         
+                        </a>                                          
+                    </li>
+                    <li data-role="list-divider">Dangerous Goods Item 2</li>
+                    <li>
+                        <a href="#dglist" onclick ="setitem('list2');">
+                            <img src ="img/Question.png" id ="list2img">
+                            <h3 id ="list2name">DG Type</h3>
+                            <p id ="list2desc">Select DG Class.</p>                         
+                        </a>                                          
+                    </li>
+                </ul> 
+                <br>
+                <a href="#compatability" data-role="button" data-theme="e" onclick ="checkcompatability();">Check Compatability</a>
+            </div>
+
+        </div>
+
+        <div data-role="page" id ="compatability">
+
+            <div data-role="content" >
+                <img src="img/123DGAwareness.jpg" alt="123DGAwareness"/> 
+                <br>
+                <div id ="answer">
+
+                </div>
+                <a href="#dgcompare" data-role="button" data-theme="e">Select Classes</a>
+            </div>
+
+        </div>
+
+
+        <div data-role="page" id ="dglist">
+
+            <div data-role="content">
+                <ul data-role="listview">
+
+                    <li >
+                        <a href="#dgcompare" onclick ="selectitem(this, '1');">
+                            <img src ="img/1_Explosives.png" alt="Dangerous Goods Class 1: Explosives">
+                            <p style ="white-space: normal;"><strong> 1: Explosives</strong></p>
+                            <p style ="white-space: normal;">Substances and articles used to produce explosions or pyrotechnic effects.</p>                         
+                        </a>                                          
+                    </li>
+                    <li >
+                        <a href="#dgcompare" onclick ="selectitem(this, '2.1');">
+                            <img src ="img/2_1_FlammableGas.png">
+                            <p style ="white-space: normal;"><strong>2.1: Flammable Gas</strong></p>
+                            <p style ="white-space: normal;" >Flammable Gasses.</p>                         
+                        </a>                                          
+                    </li>
+
+                    <li >
+                        <a href="#dgcompare" onclick ="selectitem(this, '2.2');">
+                            <img src ="img/2_2_NonFlammableNonToxicGas.png">
+                            <p style ="white-space: normal;"><strong>2.2: Non-Flammable Non-Toxic Gas</strong></p>
+                            <p style ="white-space: normal;">Gases that are non-flammable and non-toxic, but which can accelerate combustion.</p>                         
+                        </a>                                          
+                    </li>
+                    <li >
+                        <a href="#dgcompare" onclick ="selectitem(this, '2.3');">
+                            <img src ="img/2_3_ToxicGas.png">
+                            <p style ="white-space: normal;"><strong>2.3: Toxic Gas</strong></p>
+                            <p style ="white-space: normal;">Gases liable to cause death or serious injury to human health if inhaled.</p>                         
+                        </a>                                          
+                    </li>
+
+                    <li >
+                        <a href="#dgcompare" onclick ="selectitem(this, '3');">
+                            <img src ="img/3_FlammableLiquids.png">
+                            <p style ="white-space: normal;"><strong>3: Flammable Liquids</strong></p>
+                            <p style ="white-space: normal;">Liquids, mixtures of liquids or liquids containing solids in suspensions which can be ignited and will burn. </p>                         
+                        </a>                                          
+                    </li>
+
+                    <li >
+                        <a href="#dgcompare" onclick ="selectitem(this, '4.1');">
+                            <img src ="img/4_1_FlammableSolid.png">
+                            <p style ="white-space: normal;"><strong>4.1: Flammable solids</strong></p>
+                            <p style ="white-space: normal;">Self-reactive and related substances and desensitized explosives - solids easily ignited and readily combustible.</p>                         
+                        </a>                                          
+                    </li>
+                    <li >
+                        <a href="#dgcompare" onclick ="selectitem(this, '4.2');">
+                            <img src ="img/4_2_SpontaneouslyCombustible.png">
+                            <p style ="white-space: normal;"><strong>4.2: Spontaneously combustible</strong></p>
+                            <p style ="white-space: normal;">Substances liable to spontaneous combustion.</p>                         
+                        </a>                                          
+                    </li>
+
+                    <li >
+                        <a href="#dgcompare" onclick ="selectitem(this, '4.3');">
+                            <img src ="img/4_3_DangerousWhenWet.png">
+                            <p style ="white-space: normal;"><strong>4.3: Dangerous When Wet</strong></p>
+                            <p style ="white-space: normal;">Substances which in contact with water emit flammable gasses.</p>                         
+                        </a>                                          
+                    </li>
+
+                    <li >
+                        <a href="#dgcompare" onclick ="selectitem(this, '5.1');">
+                            <img src ="img/5_1_OxidizingSubstances.png">
+                            <p style ="white-space: normal;"><strong>5.1: Oxidizing substances</strong></p>
+                            <p style ="white-space: normal;">Substances (liquid or solid) that are not necessarily combustible, but which can cause or contribute to the combustion of other substances.</p>                         
+                        </a>                                          
+                    </li>
+
+
+                    <li >
+                        <a href="#dgcompare" onclick ="selectitem(this, '5.2');">
+                            <img src ="img/5_2_OrganicPeroxide.png">
+                            <p style ="white-space: normal;"><strong>5.2: Organic Peroxides</strong></p>
+                            <p style ="white-space: normal;">Substances (liquid or solid) which are thermally unstable and may rapidly decompose.</p>                         
+                        </a>                                          
+                    </li>
+
+                    <li >
+                        <a href="#dgcompare" onclick ="selectitem(this, '6');">
+                            <img src ="img/6_1_ToxicSubstances.png">
+                            <p style ="white-space: normal;"><strong>6.1: Toxic Substances</strong></p>
+                            <p style ="white-space: normal;">Solid or liquid substances which are liable to cause death, serious injury or are harmful to human health if inhaled, swallowed or absorbed through the skin. </p>                         
+                        </a>                                          
+                    </li>
+
+                    <li >
+                        <a href="#dgcompare" onclick ="selectitem(this, '6');">
+                            <img src ="img/6_2_InfectionsSubstances.png">
+                            <p style ="white-space: normal;"><strong>6.2: Toxic Substances</strong></p>
+                            <p style ="white-space: normal;">Substances containing viable micro-organisms that are known or believed to cause disease in humans or animals.</p>                         
+                        </a>                                          
+                    </li>
+
+                    <li >
+                        <a href="#dgcompare" onclick ="selectitem(this, '7');">
+                            <img src ="img/7_RadioactiveMaterial.png">
+                            <p style ="white-space: normal;"><strong>7: Radioactive Material</strong></p>
+                            <p style ="white-space: normal;">Materials or combinations of materials which spontaneously emit ionising radiation above a minimal level.</p>                         
+                        </a>                                          
+                    </li>
+
+                    <li >
+                        <a href="#dgcompare" onclick ="selectitem(this, '8');">
+                            <img src ="img/8_CorrosiveSubstances.png">
+                            <p style ="white-space: normal;"><strong>8: Corrosive Substances</strong></p>
+                            <p style ="white-space: normal;">Substances (solid or liquid) which will damage living tissue, goods or equipment on contact, by chemical action.</p>                         
+                        </a>                                          
+                    </li>
+
+                    <li>
+                        <a href="#dgcompare" onclick ="selectitem(this, '9');">
+                            <img src ="img/9_MiscellaneousDangerousGoods.png">
+                            <p style ="white-space: normal;"><strong>9: Miscellaneous Dangerous Goods</strong></p>
+                            <p style ="white-space: normal;">Substances which have potentially dangerous properties that are relatively minor, or are not covered by any of the classes already described.</p>                         
+                        </a>                                          
+                    </li>
+
+                    <li >
+                        <a href="#dgcompare" onclick ="selectitem(this, 'A');">
+                            <img src ="img/Food.png">
+                            <p style ="white-space: normal;"><strong>Food or Food Empties</strong></p>
+                            <p style ="white-space: normal;">What do you want here Graham?</p>                         
+                        </a>                                          
+                    </li>
+
+                    <li >
+                        <a href="#dgcompare" onclick ="selectitem(this, 'B');">
+                            <img src ="img/FireRisk.png">
+                            <p style ="white-space: normal;"><strong>Fire risk</strong></p>
+                            <p style ="white-space: normal;">Substances with a fire risk or combustible liquids</p>    
+                        </a>                                          
+                    </li>            
+                </ul> 
+            </div>
+
+
+        </div>
+
+
+    </body>
+</html>
